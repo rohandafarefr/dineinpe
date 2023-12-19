@@ -1,0 +1,58 @@
+/* Reset some default styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar styling */
+.sidebar {
+    height: 100%;
+    width: 230px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000000;
+    padding-top: 20px;
+}
+
+.sidebar h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.sidebar li {
+    padding: 7px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    background: #171717;
+    border-radius: 20px;
+}
+
+.sidebar li a {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    transition: background-color 0.3s;
+}
+
+
+/* Content styling */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
