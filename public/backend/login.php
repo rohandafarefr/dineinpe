@@ -17,10 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
-        $hashedPassword = $row['password'];
+        $storedPassword = $row['password'];
 
         // Verify the password
-        if (password_verify($password, $hashedPassword)) {
+        if ($password == $storedPassword) {
             // Password is correct, set session based on user type and redirect
             session_start();
             if ($row['type'] == 'user') {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             } elseif ($row['type'] == 'admin') {
                 $_SESSION['admin_id'] = $row['id'];
-                header("Location: ../../");
+                header("Location: ../../admin/index.php");
                 exit();
             }
         } else {
@@ -51,5 +51,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
 ?>

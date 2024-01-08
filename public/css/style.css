@@ -142,7 +142,7 @@ footer nav ul li a{
     flex-direction: column;
 }
 .container-3 .title{
-    color: #FFF;
+    color: #000;
     text-align: justify;
     font-family: Montserrat;
     font-size: 25px;
@@ -154,7 +154,7 @@ footer nav ul li a{
 }
 .container-3 .disc{
     width: 80%;
-    color: #FFF;
+    color: #000;
     text-align: justify;
     font-family: Montserrat;
     font-size: 22px;
@@ -768,3 +768,6 @@ footer nav ul li a{
 }
 /* contact page ends */
 
+@media only screen and (max-width: 600px){
+  
+}

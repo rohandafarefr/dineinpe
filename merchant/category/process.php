@@ -1,5 +1,5 @@
 <?php
-    $uploadsDirectory = '../../uploads/'; // Your chosen directory
+    $uploadsDirectory = 'http://localhost/dineinpe/uploads/'; // Your chosen directory
 
     if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $tempPath = $_FILES['image']['tmp_name'];

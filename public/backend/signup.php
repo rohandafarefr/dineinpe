@@ -10,12 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Hash the password for security
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert user data into the database
     $sql = "INSERT INTO users (name, number, email, password)
-            VALUES ('$name', '$number', '$email', '$hashedPassword')";
+            VALUES ('$name', '$number', '$email', '$password')";
 
     if ($conn->query($sql) === TRUE) {
         // Registration successful

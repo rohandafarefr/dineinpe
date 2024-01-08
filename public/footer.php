@@ -10,6 +10,6 @@
         </ul>
     </nav>
     <div class="copyrightSection">
-        <p>&copy; <?php echo date("Y"); ?> Dine-in Pe | OneUIX by Rohan D.</p>
+        <p>&copy; <?php echo date("Y"); ?> Dine-in Pe by Rohan D.</p>
     </div>
 </footer>

@@ -21,12 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Hash the password for security
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
     // Insert merchant data into the database
     $sql = "INSERT INTO merchants (name, outlet_name, number, email, address, outlet_type, password)
-            VALUES ('$name', '$outletName', '$number', '$email', '$address', '$outletType', '$hashedPassword')";
+            VALUES ('$name', '$outletName', '$number', '$email', '$address', '$outletType', '$password')";
 
     if ($conn->query($sql) === TRUE) {
         // Registration successful
