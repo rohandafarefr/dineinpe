@@ -59,7 +59,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             // Product updated successfully
-            $_SESSION['edit_success'] = true;
+
+            // Check if a new image is provided
+            if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $uploadsDirectory = '../../uploads/'; // Your chosen directory
+                $baseURL = 'http://localhost/dineinpe/uploads/'; // Your base URL
+
+                $tempPath = $_FILES['image']['tmp_name'];
+                $newFileName = uniqid() . '_' . $_FILES['image']['name']; // Generate a unique filename
+                $newPath = $uploadsDirectory . $newFileName;
+                $imageURL = $baseURL . $newFileName; // Full URL for image
+
+                if (move_uploaded_file($tempPath, $newPath)) {
+                    // Successfully moved the uploaded image
+                    // Update the image path in the database
+                    $updateImageSQL = "UPDATE products SET image_path = ? WHERE id = ?";
+                    $stmtImage = $conn->prepare($updateImageSQL);
+
+                    if ($stmtImage) {
+                        $stmtImage->bind_param('si', $imageURL, $productId);
+                        
+                        if ($stmtImage->execute()) {
+                            // Image path updated successfully
+                            $_SESSION['edit_success'] = true;
+                        } else {
+                            // Error handling for statement execution
+                            $_SESSION['edit_error'] = "Error updating image path: " . $stmtImage->error;
+                        }
+
+                        // Close the statement
+                        $stmtImage->close();
+                    } else {
+                        // Error handling for prepared statement
+                        $_SESSION['edit_error'] = "Error preparing image update statement: " . $conn->error;
+                    }
+                } else {
+                    // Failed to move the uploaded image
+                    $_SESSION['edit_error'] = "Failed to move the uploaded image.";
+                }
+            } else {
+                // No new image provided
+                $_SESSION['edit_success'] = true;
+            }
         } else {
             // Error handling for statement execution
             $_SESSION['edit_error'] = "Error executing statement: " . $stmt->error;
@@ -193,25 +234,15 @@ button:hover {
         // Check if $product is set and not empty before displaying the form
         if (isset($product) && !empty($product)) {
         ?>
-            <form action="edit.php?id=<?php echo $productId; ?>" method="post">
+            <form action="edit.php?id=<?php echo $productId; ?>" method="post" enctype="multipart/form-data">
                 <input type="text" name="name" placeholder="Product Name" class="name" value="<?php echo $product['name']; ?>" required>
                 <textarea name="description" placeholder="Product Description" required><?php echo $product['description']; ?></textarea>
                 <input type="number" name="price" placeholder="Product Price" value="<?php echo $product['price']; ?>" step="0.01" required>
-                <label for="category_id">Category:</label>
-                <select name="category_id" id="category_id" required>
-                    <!-- Retrieve and display categories from the database -->
-                    <?php
-                    $sql = "SELECT id, name FROM categories";
-                    $result = $conn->query($sql);
+                <!-- Include this in your HTML form -->
+                <label class="upload-btn" for="fileInput">Change Image</label>
+                <input type="file" name="image" id="fileInput" accept="image/*" class="visually-hidden">
+                <label class="file-name" id="fileNameLabel">No file chosen</label>
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $selected = ($row['id'] == $product['category_id']) ? 'selected' : '';
-                            echo '<option value="' . $row['id'] . '" ' . $selected . '>' . $row['name'] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
 
                 <button type="submit">Update Product</button>
             </form>
@@ -221,5 +252,11 @@ button:hover {
         }
         ?>
     </div>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function () {
+            var fileName = this.files[0].name;
+            document.getElementById('fileNameLabel').innerText = fileName;
+        });
+    </script>
 </body>
 </html>
